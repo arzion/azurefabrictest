@@ -1,0 +1,48 @@
+﻿using System;
+
+namespace Wirex.Engine
+{
+    public class Order
+    {
+        public Order(CurrencyPair currencyPair, Side side, decimal price, decimal amount)
+        {
+            Id = Guid.NewGuid();
+            CurrencyPair = currencyPair;
+            Price = price;
+            Side = side;
+            Amount = amount;
+            RemainingAmount = amount;
+        }
+
+        public Guid Id { get; }
+        public CurrencyPair CurrencyPair { get; private set; }
+        public decimal Price { get; private set; }
+        public Side Side { get; private set; }
+        public decimal Amount { get; private set; }
+        public decimal RemainingAmount { get; set; }
+
+        public bool IsClosed => RemainingAmount == 0;
+
+        protected bool Equals(Order other)
+        {
+            return Id.Equals(other.Id);
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            return obj.GetType() == GetType() && Equals((Order)obj);
+        }
+
+        public override int GetHashCode()
+        {
+            return Id.GetHashCode();
+        }
+
+        public override string ToString()
+        {
+            return $"Id: {Id}, CurrencyPair: {CurrencyPair}, Price: {Price}, Side: {Side}, Amount: {Amount}, RemainingAmount: {RemainingAmount}";
+        }
+    }
+}
