@@ -44,7 +44,7 @@ namespace Wirex.Engine.Tests.Given_TradingEngine
         {
             while (orders.TryDequeue(out var order))
             {
-                engine.Place(order);
+                engine.PlaceAsync(order);
             }
         }
     }

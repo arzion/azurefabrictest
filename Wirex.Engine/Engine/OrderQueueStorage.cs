@@ -27,7 +27,7 @@ namespace Wirex.Engine.Engine
         public OrderQueue GetOrCreateQueue(CurrencyPair currencyPair, Side side)
         {
             var foundQueue =
-                _queues.FirstOrDefault(q => Equals(q.CurrencyPair, currencyPair) && q.Side == side);
+                _queues.FirstOrDefault(q => Equals(q.Key.CurrencyPair, currencyPair) && q.Key.Side == side);
 
             if (foundQueue == null)
             {

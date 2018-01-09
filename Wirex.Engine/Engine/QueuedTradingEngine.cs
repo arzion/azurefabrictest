@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Wirex.Engine.Services;
 
 namespace Wirex.Engine.Engine
@@ -27,7 +28,7 @@ namespace Wirex.Engine.Engine
         /// Places the specified order to process.
         /// </summary>
         /// <param name="order">The order.</param>
-        public void Place(Order order)
+        public Task PlaceAsync(Order order)
         {
             lock (_processOrdersSyncObject)
             {
@@ -38,6 +39,8 @@ namespace Wirex.Engine.Engine
             RaiseOrderOpened(order);
 
             CloseOrders(order);
+
+            return Task.FromResult(true);
         }
 
         /// <summary>

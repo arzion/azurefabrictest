@@ -20,7 +20,6 @@ namespace Wirex.Engine
         public Side Side { get; private set; }
         public decimal Amount { get; private set; }
         public decimal RemainingAmount { get; set; }
-
         public bool IsClosed => RemainingAmount == 0;
 
         protected bool Equals(Order other)

@@ -11,15 +11,7 @@ namespace Wirex.Engine.Engine
     {
         private readonly SortedList<OrderSortedKey, Order> _orders;
 
-        /// <summary>
-        /// The currency pair of orders in queue.
-        /// </summary>
-        public CurrencyPair CurrencyPair { get; }
-
-        /// <summary>
-        /// Gets or sets the side of orders in queue.
-        /// </summary>
-        public Side Side { get; }
+        public OrderQueueKey Key { get; set; }
 
         /// <summary>
         /// Gets a value indicating whether the queue is empty.
@@ -36,8 +28,7 @@ namespace Wirex.Engine.Engine
         /// <param name="side">The side.</param>
         public OrderQueue(CurrencyPair currencyPair, Side side)
         {
-            CurrencyPair = currencyPair;
-            Side = side;
+            Key = new OrderQueueKey(currencyPair, side);
             _orders = new SortedList<OrderSortedKey, Order>();
         }
 
@@ -47,16 +38,10 @@ namespace Wirex.Engine.Engine
         /// <param name="order">The order that should be placed into the queue.</param>
         public void Add(Order order)
         {
-            if (!Equals(order.CurrencyPair, CurrencyPair))
+            if (!Equals(Key, new OrderQueueKey(order.CurrencyPair, order.Side)))
             {
-                throw new InvalidOperationException("Order cannot be added into the queue because it has different currency pair." +
-                    $"Order currency pair is: {order.CurrencyPair} But queue is for {CurrencyPair}");
-            }
-
-            if (order.Side != Side)
-            {
-                throw new InvalidOperationException("Order cannot be added into the queue because it has different side." +
-                    $"Order side is: {order.Side} But queue is for {Side}");
+                throw new InvalidOperationException("Order cannot be added into the queue because it has different currency pair or side." +
+                    $"Order currency pair is: {order.CurrencyPair} and side is {order.Side} But queue is for {Key}");
             }
 
             _orders.Add(new OrderSortedKey(order), order);
@@ -85,7 +70,7 @@ namespace Wirex.Engine.Engine
             }
 
             // take order with lowest price if order is for sell
-            if (Side == Side.Sell)
+            if (Key.Side == Side.Sell)
             {
                 var firstOrder = _orders.FirstOrDefault();
                 return firstOrder.Value;

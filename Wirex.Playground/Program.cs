@@ -39,8 +39,8 @@ namespace Wirex.Playground
             Order order;
             while (orders.TryDequeue(out order))
             {
-                Console.WriteLine("Place: " + order + " Thread: " + Thread.CurrentThread.ManagedThreadId);
-                engine.Place(order);
+                Console.WriteLine("PlaceAsync: " + order + " Thread: " + Thread.CurrentThread.ManagedThreadId);
+                engine.PlaceAsync(order).GetAwaiter().GetResult();
             }
         }
     }

@@ -43,7 +43,7 @@ namespace Wirex.Engine.Tests.Given_TradingEngine
             // Act
             foreach (var order in Orders)
             {
-                Sut.Place(order);
+                Sut.PlaceAsync(order).GetAwaiter().GetResult();
             }
         }
     }
